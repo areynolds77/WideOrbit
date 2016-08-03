@@ -42,23 +42,7 @@ Function Get-AllRadioStations {
             HelpMessage = "IP address of the WideOrbit Central Server you wish to target. FQDNs or hostnames are not supported."
         )]
         [ValidateScript({$_ -match [IPAddress]$_})]
-        [string]$wo_ip,
-        [Parameter(
-            ParameterSetName = 'Export',
-            Position = 1,
-            Mandatory = $true,
-            HelpMessage = "If exporting datafiles, enter a folder path to export to."
-        )]
-        [string]$export_dir,
-        [Parameter(
-            ParameterSetName = 'Export',
-            HelpMessage = "Enable this if you wish to export csv files listing the categories and workstations for each radio station."
-        )]
-        [switch]$export,
-        [Parameter(
-            HelpMessage = "Enable this if you wish to view the categories and workstations for each workstation."
-        )]
-        [switch]$detailed
+        [string]$wo_ip
     )
     Begin {
         $FunctionTime = [System.Diagnostics.Stopwatch]::StartNew()
@@ -79,73 +63,22 @@ Function Get-AllRadioStations {
             Write-Debug -Message "Provided Input values:"
             Write-Debug -Message "Provided WideOrbit Central Server IP Address: $wo_ip"
             Write-Debug -Message "Generated clientID: $wo_clientID"
-            Write-Debug -Message "Detailed view enabled: $detailed"
-            Write-Debug -Message "Export mode enabled: $export"
-            Write-Debug -Message "Export directory: $export_dir"
         #endregion
     }
     Process {
-        #Pad cartName
         Write-Debug -Message "Requesting all radio stations from WideOrbit Central Server located at $wo_ip"
         #Post Get-AllRadioStations Request
         $GRS_Body = '<?xml version="1.0" encoding="UTF-8"?><getAllRadioStationsRequest version="1"><clientId>{0}</clientId></getAllRadioStationsRequest>' -f $wo_clientID
         $GRS_Reply = [xml](Invoke-WebRequest -Uri $wo_uri -Method POST -ContentType "text/xml" -Body $GRS_Body)
         if ($GRS_Reply.getAllRadioStationsReply.status -notmatch "Success") {
-            Write-Warning "Request to retreive radios stations from $wo_ip has failed." 
+            Write-Error "Request to retreive radios stations from $wo_ip has failed." -ErrorAction Stop 
         } elseif ($GRS_Reply.getAllRadioStationsReply.radioStations -eq "") {
-            Write-Output "No radio stations found on $wo_ip"
-        } elseif ($GRS_Reply.getAllRadioStationsReply.radioStations.radioStation.stationName.Count -eq 1 ) {
-            $Output = New-Object -TypeName psobject
-            $Output | Add-Member -MemberType NoteProperty -Name RadioStation -Value $GRS_Reply.getAllRadioStationsReply.radioStations.radioStation
-            $station_name = $Output.radioStation.stationName
-                Write-Debug -Message "StationName: $station_name"
-                Write-Debug -Message "Generating categories object"
-                $categories = $Output.radioStation.categories.category
-                Write-Debug -Message "Generating workstations object"
-                $workstations = $Output.radioStation.workstations.workstation
-                if ($detailed -eq $true) {
-                     Write-Output "Categories assigned to $station_name"
-                     $categories | Format-Table -AutoSize
-                     Write-Output "Workstations assigned to $station_name"
-                     $workstations | Format-Table -AutoSize
-                }
-                if ($export -eq $true) {
-                    Write-Debug -Message "Exporting category & workstation datafiles..."
-                    $categories | Export-Csv -Path "$export_dir\$station_name--Categories.csv" -NoTypeInformation
-                    $workstations | Export-Csv -Path "$export_dir\$station_name--Workstations.csv"
-                }
-        } else {
-            $Output = New-Object -TypeName psobject
-            $Output | Add-Member -MemberType NoteProperty -Name RadioStation -Value $GRS_Reply.getAllRadioStationsReply.radioStations.radioStation
-            "RadioStation Count: " + $Output.radioStation.Count | Write-Debug
-            For ($i=0; $i -lt ($Output.radioStation.Count); $i++) {
-                Write-Debug -Message "Loop Count: $i"
-                $station_name = $Output.radioStation[$i].stationName
-                Write-Debug -Message "StationName: $station_name"
-                Write-Debug -Message "Generating categories object"
-                $categories = $Output.radioStation[$i].categories.category
-                Write-Debug -Message "Generating workstations object"
-                $workstations = $Output.radioStation[$i].workstations.workstation
-                if ($detailed -eq $true) {
-                     Write-Output "Categories assigned to $station_name"
-                     $categories | Format-Table -AutoSize  #Out-GridView -Title "$station_name Categories"
-                     Write-Output "Workstations assigned to $station_name"
-                     $workstations | Format-Table -AutoSize #Out-GridView -Title "$station_name Workstations"
-                }
-                if ($export -eq $true) {
-                    Write-Debug -Message "Exporting category & workstation datafiles..."
-                    $categories | Export-Csv -Path "$export_dir\$station_name--Categories.csv" -NoTypeInformation
-                    $workstations | Export-Csv -Path "$export_dir\$station_name--Workstations.csv"
-                }
-            } 
+            Write-Error "No radio stations found on $wo_ip" -ErrorAction Stop
         }
     }
     End {
+        $Out = $GRS_Reply.getAllRadioStationsReply.radioStations.radioStation
+        $Out
         "Get-AllRadioStations completed in " + $FunctionTime.elapsed | Write-Debug
-        If ($detailed -eq $false) {
-            $Output.radioStation | Format-Table 
-        }
     }
 }
-
-Get-AllRadioStations -wo_ip 172.21.44.14 -detailed
