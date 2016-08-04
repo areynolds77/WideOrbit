@@ -78,7 +78,6 @@ Function Get-MediaAsset {
             Write-Debug -Message "Provided WideOrbit category: $wo_category"
             Write-Debug -Message "Generated clientID: $wo_clientID"
         #endregion
-        $array = @()
     }
     Process {
         #Pad cartName
