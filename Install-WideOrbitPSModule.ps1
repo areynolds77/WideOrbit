@@ -18,7 +18,7 @@ if ('' -eq $InstallDirectory) {
     }
 
     if(!(Test-Path $personalModules)) {
-        Write-Error "$personalModules does not exist."
+        Write-Warning "$personalModules does not exist."
     }
 
     $InstallDirectory = Join-Path -Path $personalModules -ChildPath WideOrbit
