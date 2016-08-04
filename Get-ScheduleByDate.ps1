@@ -85,20 +85,14 @@ Function Get-ScheduleByDate {
         #Post Get-MediaAssetRequest
         $GS_Body = '<?xml version="1.0" encoding="UTF-8"?><getScheduleByDateRequest version="1"><clientId>{0}</clientId><radioStationName>{1}</radioStationName><date>{2}</date></getScheduleByDateRequest>' -f $wo_clientID, $wo_stationname, $wo_date
         $GS_Reply = [xml](Invoke-WebRequest -Uri $wo_uri -Method Post -ContentType "text/xml" -Body $GS_Body)
-        #if ($GS_Reply.getScheduleByDateRequestReply.status -notmatch "Success") {
-        #    $GS_Error = $GS_Reply.getScheduleByDateRequestReply.description
-        #    Write-Output "ERROR: Request to retreive playlist for date: $wo_date from station: $wo_stationname has failed. Reason: $GS_Error"
-        #}
-
-
-       
-       
-        
-        
+        if ($GS_Reply.getScheduleByDateReply.status -notmatch "Success") {
+            $GS_Error = $GS_Reply.getScheduleByDateReply.description
+            Write-Output "ERROR: Request to retreive playlist for date: $wo_date from station: $wo_stationname has failed. Reason: $GS_Error"
+        }
     }
     End {
         "Get-MediaAsset completed in " + $FunctionTime.elapsed | Write-Debug
+        $Out = $GS_Reply.GetScheduleByDateReply.schedule
+        $Out
     }
 }
-
-Get-ScheduleByDate -wo_ip 172.21.44.252 -wo_stationname 'ATLANTA-TX2' -wo_date '2016-07-30' -Debug
