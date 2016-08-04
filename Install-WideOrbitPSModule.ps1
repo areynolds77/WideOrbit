@@ -1,8 +1,8 @@
 param([string]$InstallDirectory)
 
 $filelist = echo `
-    Import-WideOrbit.psd1 `
-    Import-WideOrbit.psm1 `
+    WideOrbit.psd1 `
+    WideOrbit.psm1 `
     Export-MediaAssets.ps1 `
     Get-AllRadioStations.ps1 `
     Get-MediaAsset.ps1 `
