@@ -15,16 +15,16 @@ Function Export-MediaAssets
         The IP address of your WideOrbit Central server
 
         .PARAMETER wo_export_dir
-        The directory to save the Exported Files csv in. Audio will be saved here as well.
+        The directory to save the Exported audio in.
 
         .PARAMETER backup
         Include this flag to backup the selected media assets. 
 
-        .PARAMETER wo_allcarts
+        .PARAMETER allcarts
         Include this flag to backup ALL carts in the provided category.
 
         .EXAMPLE 
-        PS C:\> Export-Media Assets -wo_category COM -wo_ip 192.168.1.1 -wo_export_dir c:\export
+        PS C:\> Export-Media Assets -wo_category COM -wo_ip 192.168.1.1
 
         .EXAMPLE
         PS C:\> Sync-WOPurge -wo_category COM -wo_purgefile c:\WOTrafficPurgeFile.xlsx -wo_ip 192.168.1.1 -wo_export_dir c:\export -whatif
@@ -64,12 +64,17 @@ Function Export-MediaAssets
         [ValidateScript({$_ -match [IPAddress]$_})]
         [string]$wo_ip,
         [Parameter(
+            ParameterSetName = 'Backup',
+            Mandatory = $true,
             Position = 2,
-            Mandatory = $True,
             HelpMessage = 'Directory to store exported audio.'
         )]
         [ValidateScript({Test-Path $_ -pathType Container})]
         [string]$wo_exportdir,
+        [Parameter(
+            ParameterSetName = 'Backup',
+            HelpMessage = 'Enable this if you wish to backup selected audio files.'
+        )]
         [switch]$backup,
         [switch]$allcarts
     )  
