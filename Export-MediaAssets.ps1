@@ -17,7 +17,7 @@ Function Export-MediaAssets
         .PARAMETER wo_export_dir
         The directory to save the Exported Files csv in. Audio will be saved here as well.
 
-        .PARAMETER wo_backup
+        .PARAMETER backup
         Include this flag to backup the selected media assets. 
 
         .PARAMETER wo_allcarts
@@ -66,12 +66,12 @@ Function Export-MediaAssets
         [Parameter(
             Position = 2,
             Mandatory = $True,
-            HelpMessage = 'Directory to export Delete verification report. Audio will also be exported to this dir'
+            HelpMessage = 'Directory to store exported audio.'
         )]
         [ValidateScript({Test-Path $_ -pathType Container})]
         [string]$wo_exportdir,
-        [switch]$wo_backup,
-        [switch]$wo_allcarts
+        [switch]$backup,
+        [switch]$allcarts
     )  
     Begin {
         $FunctionTime = [System.Diagnostics.Stopwatch]::StartNew()
@@ -92,9 +92,9 @@ Function Export-MediaAssets
             Write-Debug -Message "Provided input values"
             Write-Debug -Message "Provided WideOrbit Category: $wo_category"
             Write-Debug -Message "Provided WideOrbit Central Server IP Address: $wo_ip"
-            Write-Debug -Message "Provided Export directory: $wo_exportdir"
-            Write-Debug -Message "Audio Backup enabled: $wo_backup"
-            Write-Debug -Message "Cart Selection enabled: $wo_allcarts"
+            Write-Debug -Message "Provided Audio Export directory: $wo_exportdir"
+            Write-Debug -Message "Audio Backup enabled: $backup"
+            Write-Debug -Message "Cart Selection enabled: $allcarts"
         #endregion
         #region Get Media Asset Metadata
             Write-Verbose "Requesting media asset information from WideOrbit Central Server for carts in $wo_category ..."
@@ -104,19 +104,16 @@ Function Export-MediaAssets
         #endregion
         #region Create To Be Exported Array and export datafile
             Write-Debug -Message "Creating 'To Be Exported array'..." 
-            $ExportFile = $wo_exportdir + "\WO - Exported Files - " + $(Get-Date -f 'yyyy-MM-dd') + ".csv" 
-            if ($wo_allcarts -eq $false) {
+            if ($allcarts -eq $false) {
                 $ToBeExported =  $MediaAssetInfoRet.searchRadioStationContentReply.cartObjects.cartObject  |  Out-GridView -PassThru -Title "Please select the media assets you wish to export" 
             } else {
                 $ToBeExported =  $MediaAssetInfoRet.searchRadioStationContentReply.cartObjects.cartObject  
             }
-            $ToBeExported | Export-Csv -Path $ExportFile -NoTypeInformation 
-            Write-Verbose -Message "CSV Datafile exported to $ExportFile"
         #endregion
     }
     Process{
         #Backup Audio
-        if ($wo_backup -eq $True) {
+        if ($backup -eq $True) {
             $progresscount = 1
             foreach ($BackupCart in $ToBeExported) {
                 if ($PSCmdlet.ShouldProcess(($wo_category + "/" + $BackupCart.cartName + " - " + $BackupCart.desc1),"Backing up media asset")) {
