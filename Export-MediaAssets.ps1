@@ -112,6 +112,8 @@ Function Export-MediaAssets
                 $wo_exportdir = $wo_exportdir.Substring(0,$wo_exportdir.Length-1)
             }
         #endregion
+    }
+    Process{
         #region Debug Input Values
             Write-Debug -Message "Provided input values"
             Write-Debug -Message "Provided WideOrbit Category: $wo_category"
@@ -133,9 +135,8 @@ Function Export-MediaAssets
             } else {
                 $ToBeExported =  $MediaAssetInfoRet.searchRadioStationContentReply.cartObjects.cartObject  
             }
+            $ToBeExported
         #endregion
-    }
-    Process{
         #Backup Audio
         if ($backup -eq $True) {
             $progresscount = 1
