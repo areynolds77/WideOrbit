@@ -2,14 +2,13 @@ Function Export-MediaAssets
 {
     <#
         .SYNOPSIS 
-        Purges expired media assets from WideOrbit according to a supplied WOTraffic purge file.
+        Exports selected media assets and/or metadata from WideOrbit.
         .DESCRIPTION
-        Deletes media assets from WideOrbit according to a supplied WOTraffic purge file. 
-        Will export a csv data file listing deleted files. Files can be backed up before deletion.
-        Supports common paramaters -verbose, -whatif, and -confirm.
+        Retreives a list of all the media assets in a provided WideOrbit category, and outputs their respective metadata.
+        The user can also choose to backup the selected media assets to a provided folders. 
 
         .PARAMETER wo_category
-        The WideOrbit category code you wish to export media assets from.'
+        The WideOrbit category code you wish to export media assets from.
 
         .PARAMETER wo_ip
         The IP address of your WideOrbit Central server
@@ -26,18 +25,37 @@ Function Export-MediaAssets
         .EXAMPLE 
         PS C:\> Export-Media Assets -wo_category COM -wo_ip 192.168.1.1
 
+        This will retreive every media asset in the COM category, prompt the user to select which of the media assets to export, 
+        and then output a list of every selected media asset, and their respective metadata.
+
         .EXAMPLE
-        PS C:\> Sync-WOPurge -wo_category COM -wo_purgefile c:\WOTrafficPurgeFile.xlsx -wo_ip 192.168.1.1 -wo_export_dir c:\export -whatif
-        This will output a list of every cart that would be deleted if the '-whatif' flag was excluded.
-        Including the '-whatif' flag prevents the function from exporting a datafile, backing up any audio, or deleting any audio.
+        PS C:\> Export-MediaAssets -wo_category COM -wo_ip 192.168.1.1 -allcarts
+        
+        This will retreive every media asset in the COM category and then output a list of every media asset and its respective metadata.
+        You will not be prompted to select individual media assets.
 
         .EXAMPLE 
-        PS C:\> Sync-WOPurge -wo_category COM -wo_purgefile c:\WOTrafficPurgeFile.xlsx -wo_ip 192.168.1.1 -wo_export_dir c:\export -backup
-        This will backup all audio files to the provided Export directory before deleting them (You will still be prompted before each cart is deleted).
+        PS C:\> Export-MediaAssets -wo_category COM -wo_ip 192.168.1.1 -backup -wo_export_dir 'c:\export'
+        This will retreive every media asset in the COM category, prompt the user to select which of the media assets to export, 
+        and then output a list of every selected media asset, and their respective metadata. 
+        
+         Each selected media asset will also be copied to 'c:\export'
+
+         .EXAMPLE
+         PS C:\> Export-MediaAssets -wo_category COM -wo_ip 192.168.1.1 -allcarts | Export-Csv -path 'c:\export\Exported Media Assets.csv'
+
+         This would create a csv datafile containing every media asset in the COM category, and its respective metadata.
+
+         .EXAMPLE
+         PS C:\> COM,ENG | Export-MediaAssets -wo_ip 192.168.1.1 -allcarts | Export-Csv -path 'c:\export\Exported Media Assets.csv'
+
+         This would create a csv datafile containing every media asset in both the COM and ENG categories, as well as their respective metadata.
 
         .NOTES
         In order to make use of the backup functionality, you must have read access to the WideOrbit Central server audio directory. 
-        Non-standard file directory layouts are not supported--your top level audio directory MUST be shared, and must immediately contain the category audio folders.  
+        Non-standard file directory layouts are not supported--your top level audio directory MUST be shared, and must immediately contain the category audio folders. 
+
+        I.e. '\\192.168.1.1\AUDIO' is an acceptable directory, '\\192.168.1.1\WideOrbitAudio' is not.  
 
         .LINK
         https://github.com/areynolds77/wideorbit  
@@ -45,7 +63,8 @@ Function Export-MediaAssets
     #>
    
    [CmdletBinding(
-       SupportsShouldProcess=$true
+       SupportsShouldProcess=$true,
+       DefaultParameterSetName = 'None'
    )]
     param(
         [Parameter(
