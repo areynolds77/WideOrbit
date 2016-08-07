@@ -111,7 +111,11 @@ Function Export-MediaAssets
             if ($wo_exportdir -match '\\$') {
                 $wo_exportdir = $wo_exportdir.Substring(0,$wo_exportdir.Length-1)
             }
+            #Generate unique clientID:
+            $wo_clientID = [guid]::NewGuid()
+            $wo_clientID = "$env:computername---$wo_clientID" 
         #endregion
+        
     }
     Process{
         #region Debug Input Values

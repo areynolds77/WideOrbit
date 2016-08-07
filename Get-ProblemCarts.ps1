@@ -67,6 +67,7 @@ Function Get-ProblemCarts {
             }
             #Generate unique clientID:
             $wo_clientID = [guid]::NewGuid()
+            $wo_clientID = "$env:computername---$wo_clientID" 
             #Set URI 
             $wo_uri = $wo_ip + "/ras/playlist"
         #endregion
