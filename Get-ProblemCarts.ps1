@@ -91,7 +91,7 @@ Function Get-ProblemCarts {
             Write-Output $GPC_Output
         } else {
             $GPC_Output = $GPC_Reply.getProblemCartsReply.problemCarts.problemCart
-            Write-Output $GPC_Output
+            $GPC_Output
         }
     }
     End {

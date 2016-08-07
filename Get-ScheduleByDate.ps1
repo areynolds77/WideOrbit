@@ -88,11 +88,13 @@ Function Get-ScheduleByDate {
         if ($GS_Reply.getScheduleByDateReply.status -notmatch "Success") {
             $GS_Error = $GS_Reply.getScheduleByDateReply.description
             Write-Output "ERROR: Request to retreive playlist for date: $wo_date from station: $wo_stationname has failed. Reason: $GS_Error"
+        } else {
+            $Out = $GS_Reply.GetScheduleByDateReply.schedule
+            $Out
         }
     }
     End {
         "Get-MediaAsset completed in " + $FunctionTime.elapsed | Write-Debug
-        $Out = $GS_Reply.GetScheduleByDateReply.schedule
-        $Out
+
     }
 }
