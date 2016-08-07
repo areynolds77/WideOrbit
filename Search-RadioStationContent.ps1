@@ -1,33 +1,37 @@
 Function Search-RadioStationContent {
     <#
         .SYNOPSIS
-        The Get-MediaAsset function is used to obatin information about a provided media asset.
+        The Search-RadioStationContent function is used to search the WideOrbit Central Server for a specific media asset..
         .DESCRIPTION
-        Get-MediaAsset returns all metadata about a selected media asset. If the media asset can not 
-        be found, an error status is returned.
+        Search-RadioStationContent mimics the functionality of Audio Finder, but with a few key benefits--you can see more than 500 results at a time, and you are able to see all metadata fields.
         .PARAMETER wo_ip 
         The IP address of your WideOrbit Central server
-        .PARAMETER wo_category
-        The name of the media asset's category. Should be exactly three characters.
-        .PARAMETER wo_cartName
-        The media asset ID number for the cart you wish to target. Accepts pipeline input. Maximum four characters.
+        .PARAMETER wo_stationname
+        The name of the radio station you wish to query.
+        .PARAMETER wo_query
+        What you wish to search for. Supports the same syntax as Audio Finder (i.e. Category searchs, result sorting). Defaultss to search everything.
+        .PARAMETER wo_user
+        The user you wish to search as. Defaults to 'admin'
+        .PARAMETER wo_maxresults
+        The maximum number of results you wish to return. Defaults to 500, supports a maximum of 10,000.
         .EXAMPLE
-        Get-MediaAsset -wo_ip 192.168.1.1 -wo_category COM -wo_cartName 1001
+        Search-RadioStationContent -wo_ip 192.168.1.1 -wo_stationname 'STAR941A' 
 
-        This is the most basic example. It will query the WideOrbit Central server with an IP of 192.168.1.1 for information about cart COM/1001.
+        This is the most basic example. It will return the first 500 media assets distributed to radio station 'STAR941A'.
         .EXAMPLE
-        1001,1002,1003 | Get-MediaAsset -wo_ip 192.168.1.1 -wo_category COM | Out-GridView
+        Search-RadioStationContent -wo_ip 192.168.1.1 -wo_stationname 'STAR941A' -wo_query "COM/ KROGER sort:Title" -wo_maxresults 10
 
-        This will query the WideOrbit Central server for information about carts COM/1001, COM/1002, and COM/1003 and then pipe the output to a grid view.
+        This will return the first 5000 media assets in the COM category with the string 'KROGER' in any of the descriptive fields, and will sort the results alphabetically by Title. 
+        It will only return the first 10 results.
+
         .EXAMPLE
-        Get-MediaAsset -wo_ip 192.168.1.1 -wo_category COM -wo_cartName 1001 -debug -verbose
+        Search-RadioStationContent -wo_ip 192.168.1.1 -wo_stationname 'STAR941A' -wo_query "COM/ KROGER sort:Title" -wo_maxresults 10 -wo_user 'intern'
         
-        This will query the WideOrbit Central server for information about cart COM/1001, but will also include all diagnostic messages. Useful for troubleshooting.
+        This will return the same media assets as the above example, but only if the 'intern' user has access to them.
         .NOTES 
-        Get-MediaAsset will accept an array of cartNames as a pipeline input, but they must all be in the same category. 
-        Timers and Daypart restriction values are not yet supported.
+
         .LINK
-        https://github.com/areynolds77/ETM-ATL-WO
+        https://github.com/areynolds77/WideOrbit
     #>
     [CmdletBinding(
     )]
@@ -45,23 +49,25 @@ Function Search-RadioStationContent {
             Mandatory = $true,
             HelpMessage = "The WideOrbit name of the radio station you wish to target"
         )]
+        [ValidateNotNullOrEmpty()]
         [string]$wo_stationname,
         [Parameter(
             Position = 2,
             HelpMessage = "Your search query--uses same syntax as audio finder."
         )]
-        [string]$wo_query,
+        [ValidateNotNull()]
+        [string]$wo_query = "",
         [Parameter(
             Position = 3,
             HelpMessage = "The user you wish to search as--defaults to 'admin' "
         )]
-        [string]$wo_user,
+        [string]$wo_user = "admin",
         [Parameter(
             Position = 4,
             HelpMessage = "The maximum number of results to return--defaults to '500' , maximum of 10,000. "
         )]
         [ValidateRange(1,10000)]
-        [int]$wo_maxresults
+        [int]$wo_maxresults = 500
     )
     Begin {
         $FunctionTime = [System.Diagnostics.Stopwatch]::StartNew()
@@ -98,7 +104,8 @@ Function Search-RadioStationContent {
             Write-Output "ERROR: Request to search for audio with query: $wo_query from station: $wo_stationname has failed. Reason: $Search_Error"
         } else {
             $TotalResults = $Search_Reply.searchRadioStationContentReply.totalResults
-            Write-Debug -Message "Search returned a total of $TotalResults results."
+            $ReturnedResults = $Search_Reply.searchRadioStationContentReply.cartObjects.cartObject.count
+            Write-Debug -Message "Search returned a total of $ReturnedResults assets out of a possible $TotalResults results."
             $Out = $Search_Reply.searchRadioStationContentReply.cartObjects
             $Out
         }
