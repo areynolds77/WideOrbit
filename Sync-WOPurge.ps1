@@ -171,6 +171,7 @@ Function Sync-WOPurge
                 Write-Output $DeleteCartMessage
                 Write-Debug -Message "Delete Media Asset Body HTTP Request: '$DeleteMediaAssetBody"
                 $DeleteMediaAssetRet = Invoke-WebRequest -Uri $URI_DeleteMediaAsset -Method Post -ContentType "text/xml" -Body $DeleteMediaAssetBody
+                $DeleteMediaAssetRet | Write-Debug
             }
         }
     }
