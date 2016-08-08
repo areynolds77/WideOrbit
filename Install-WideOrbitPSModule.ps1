@@ -8,7 +8,8 @@ $filelist = echo `
     Get-MediaAsset.ps1 `
     Get-ProblemCarts.ps1 `
     Get-ScheduleByDate.ps1 `
-    Import-MediaAsset.ps1
+    Import-MediaAsset.ps1 `
+    Sync-WOPurge.ps1
 
 if ('' -eq $InstallDirectory) {
     $personalModules = Join-Path -Path ([System.Environment]::GetFolderPath('MyDocuments')) -ChildPath WindowsPowershell\Modules
