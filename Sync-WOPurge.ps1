@@ -134,6 +134,7 @@ Function Sync-WOPurge
                 "Importing cart number: " + $PurgeCarts[-1] | Write-Debug
             } until ($PurgeCarts[-1] -eq "")
             $PurgeCarts = $PurgeCarts[0..($PurgeCarts.Count -2)] #Remove last entry (which is empty)
+            $PurgeCarts = $PurgeCarts.Split('-')[-1]
             $PurgeCarts = $PurgeCarts.padLeft(4,'0')
             CloseExcelBook($PurgeFile)            
         #endregion
@@ -146,7 +147,7 @@ Function Sync-WOPurge
         #region Create To Be Deleted Array and export datafile
             Write-Debug -Message "Creating 'To Be Deleted array'..." 
             $ExportFile = $wo_exportdir + "\WO - Deleted Files - " + $(Get-Date -f 'yyyy-MM-dd') + ".csv" 
-            $ToBeDeleted =  $MediaAssetInfoRet.searchRadioStationContentReply.cartObjects.cartObject | where cartName -in $PurgeCarts
+            $ToBeDeleted =  $MediaAssetInfoRet.searchRadioStationContentReply.cartObjects.cartObject | Where-Object cartName -in $PurgeCarts
             $ToBeDeleted | Export-Csv -Path $ExportFile -NoTypeInformation 
             Write-Verbose -Message "CSV Datafile exported to '$ExportFile"
         #endregion
