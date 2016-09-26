@@ -114,6 +114,8 @@ Function Export-MediaAssets
             #Generate unique clientID:
             $wo_clientID = [guid]::NewGuid()
             $wo_clientID = "$env:computername---$wo_clientID" 
+            #Get-Date
+            $date = Get-Date -Format dd-MM-yyyy
         #endregion
         
     }
@@ -160,5 +162,6 @@ Function Export-MediaAssets
         Write-Verbose "Operation complete."
         "WideOrbit Asset export and removal completed in " + $FunctionTime.elapsed | Write-Verbose
         $ToBeExported
+        $ToBeExported | Out-File "$wo_exportdir\Exported Media--$date.csv" 
     }
 }
