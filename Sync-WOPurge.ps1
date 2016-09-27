@@ -65,7 +65,7 @@ Function Sync-WOPurge
             Mandatory=$True,
             HelpMessage='Path to the WOTraffic purge file'
         )]
-        [ValidateScript({Test-Path $_ -pathType Leaf -include *.xlsx})]
+        [ValidateScript({Test-Path $_ -pathType Leaf -include *.xls*})]
         [string]$wo_purgefile,
         [Parameter(
             Position=2,
@@ -134,8 +134,9 @@ Function Sync-WOPurge
                 "Importing cart number: " + $PurgeCarts[-1] | Write-Debug
             } until ($PurgeCarts[-1] -eq "")
             $PurgeCarts = $PurgeCarts[0..($PurgeCarts.Count -2)] #Remove last entry (which is empty)
-            $PurgeCarts = $PurgeCarts.Split('-')[-1]
+            $PurgeCarts = $PurgeCarts.Split('-')
             $PurgeCarts = $PurgeCarts.padLeft(4,'0')
+            $PurgeCarts = $PurgeCarts | Where-Object {$_ -ne "0ATL"}
             CloseExcelBook($PurgeFile)            
         #endregion
         #region Get Media Asset Metadata
