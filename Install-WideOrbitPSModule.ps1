@@ -9,7 +9,7 @@ $filelist = echo `
     Get-ProblemCarts.ps1 `
     Get-ScheduleByDate.ps1 `
     Import-MediaAsset.ps1 `
-    SearchRadioStationContent.ps1 `
+    Search-RadioStationContent.ps1 `
     Sync-WOPurge.ps1
 
 if ('' -eq $InstallDirectory) {
