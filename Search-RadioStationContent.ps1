@@ -97,7 +97,7 @@ Function Search-RadioStationContent {
     }
     Process {
         #Post Get-MediaAssetRequest
-        $Search_Body = '<?xml version="1.0" encoding="UTF-8"?><searchRadioStationContentRequest version="1"><clientId>{0}</clientId><authentication>{1}</authentication><radioStation>{2}</radioStation><query>{3}</query><start>0</start><max>{4}</max></searchRadioStationContentRequest>' -f $wo_clientID , $wo_user , $wo_stationname , $wo_query , $wo_maxresults 
+        $Search_Body = '<?xml version="1.0" encoding="UTF-8"?><searchRadioStationContentRequest version="1"><clientId>{0}</clientId><authentication>{1}</authentication><radioStations>{2}</radioStations><query>{3}</query><start>0</start><max>{4}</max></searchRadioStationContentRequest>' -f $wo_clientID , $wo_user , $wo_stationname , $wo_query , $wo_maxresults 
         $Search_Reply = [xml](Invoke-WebRequest -Uri $wo_uri -Method Post -ContentType "text/xml" -Body $Search_Body)
         if ($Search_Reply.searchRadioStationContentReply.status -notmatch "Success") {
             $Search_Error = $Search_Reply.searchRadioStationContentReply.description
