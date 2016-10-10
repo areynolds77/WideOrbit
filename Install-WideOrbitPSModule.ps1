@@ -10,6 +10,7 @@ $filelist = echo `
     Get-ScheduleByDate.ps1 `
     Import-MediaAsset.ps1 `
     Remove-MediaAsset.ps1 `
+    Search-RadioStationContent.ps1 `
     Sync-WOPurge.ps1
 
 if ('' -eq $InstallDirectory) {

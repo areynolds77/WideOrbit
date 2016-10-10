@@ -4,4 +4,5 @@
 . $PSScriptRoot\Get-ProblemCarts.ps1
 . $PSScriptRoot\Get-ScheduleByDate.ps1
 . $PSScriptRoot\Remove-MediaAsset.ps1
+. $PSScriptRoot\Search-RadioStationContent.ps1
 . $PSScriptRoot\Sync-WOPurge.ps1
