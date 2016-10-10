@@ -91,12 +91,13 @@ Function Remove-MediaAsset {
         Write-Output $DeleteCartMessage
         Write-Debug -Message "Delete Media Asset Body HTTP Request: '$DeleteMediaAssetBody"
         $DeleteMediaAssetRet = Invoke-WebRequest -Uri $URI_DeleteMediaAsset -Method Post -ContentType "text/xml" -Body $DeleteMediaAssetBody
-        $DeleteMediaAssetRet | Write-Debug
-        $DMA = [xml]($DeleteMediaAssetRet.Content)
+        $DMA = ($DeleteMediaAssetRet.Content)
+        $DMA = [xml]$DMA
         if ($DMA.deleteMediaAssetReply.status -notmatch "Success") {
             $DMA_ERROR = $DMA.deleteMediaAssetReply.description
             Write-Output "ERROR: Request to delete Media Asset $wo_category\$wo_cartName has failed. Reason: $DMA_ERROR"
         }
+        $DeleteMediaAssetRet | Write-Debug
     }
     End {
         "Remove-MediaAsset completed in " + $FunctionTime.elapsed | Write-Debug
