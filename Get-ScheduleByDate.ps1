@@ -7,25 +7,25 @@ Function Get-ScheduleByDate {
         be found, an error status is returned.
         .PARAMETER wo_ip 
         The IP address of your WideOrbit Central server
-        .PARAMETER wo_category
-        The name of the media asset's category. Should be exactly three characters.
-        .PARAMETER wo_cartName
-        The media asset ID number for the cart you wish to target. Accepts pipeline input. Maximum four characters.
+        .PARAMETER wo_stationname
+        The name of the radio station in WideOrbit.
+        .PARAMETER wo_date
+        The date you wish to check. Should be in the format YYYY-MM-dd.
         .EXAMPLE
-        Get-MediaAsset -wo_ip 192.168.1.1 -wo_category COM -wo_cartName 1001
+        Get-SchedulebyDate -wo_ip 192.168.1.1 -wo_stationname ATLANTA-TX1 -wo_date 2016-11-01
 
-        This is the most basic example. It will query the WideOrbit Central server with an IP of 192.168.1.1 for information about cart COM/1001.
+        This is the most basic example. It will query the WideOrbit Central server with an IP of 192.168.1.1 for the schedule for November 1 2016.
         .EXAMPLE
-        1001,1002,1003 | Get-MediaAsset -wo_ip 192.168.1.1 -wo_category COM | Out-GridView
+        "2016-11-01","2016-11-02" | Get-SchedulebyDate -wo_ip 192.168.1.1 -wo_stationname ATLANTA-TX1
 
-        This will query the WideOrbit Central server for information about carts COM/1001, COM/1002, and COM/1003 and then pipe the output to a grid view.
+        This will query the WideOrbit Central Server for the schedules loaded to ATLANTA-TX1 on November 1, 2016 and November 2, 2016.
         .EXAMPLE
-        Get-MediaAsset -wo_ip 192.168.1.1 -wo_category COM -wo_cartName 1001 -debug -verbose
-        
-        This will query the WideOrbit Central server for information about cart COM/1001, but will also include all diagnostic messages. Useful for troubleshooting.
+        Get-SchedulebyDate -wo_ip 192.168.1.1 -wo_stationname ATLANTA-TX1 -wo_date 2016-11-01 -debug
+
+        This will query the WideOrbit Central server with an IP of 192.168.1.1 for the schedule for November 1 2016. It will also include all diagnostic messages. 
+        Useful for troubleshooting. 
         .NOTES 
-        Get-MediaAsset will accept an array of cartNames as a pipeline input, but they must all be in the same category. 
-        Timers and Daypart restriction values are not yet supported.
+        Output is an xml object. Store it in a variable to manipulate the data within.
         .LINK
         https://github.com/areynolds77/ETM-ATL-WO
     #>
@@ -53,7 +53,7 @@ Function Get-ScheduleByDate {
             ValueFromPipelineByPropertyName = $true,
             HelpMessage = "The date of the playlist you wish to request. Should be in the form 'YYYY-MM-dd' ."
         )]
-        #[ValidatePattern('^(\d{4}\-\d{2}\-\d{2}$')]
+        [ValidatePattern('^(\d{4}\-\d{2}\-\d{2}$')]
         [string]$wo_date
     )
     Begin {
