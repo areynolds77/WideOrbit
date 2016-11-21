@@ -4,7 +4,7 @@ WideOrbit Powershell Module
 Powershell V3 or newer required
 To install to your personal modules folder (e.g. ~\Documents\WindowsPowerShell\Modules), run:
 ```powershell
-iex (new-object System.Net.WebClient).DownloadString('https://raw.github.com/areynolds77/wideorbit/master/Install-WideOrbitPSModule.ps1')
+iex (new-object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/areynolds77/WideOrbit/master/Install-WideOrbitPSModule.ps1')
 ```
 
 OR 
