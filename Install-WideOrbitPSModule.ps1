@@ -6,9 +6,7 @@ $filelist = echo `
     Export-MediaAssets.ps1 `
     Get-AllRadioStations.ps1 `
     Get-MediaAsset.ps1 `
-    Get-ProblemCarts.ps1 `
     Get-ScheduleByDate.ps1 `
-    Import-MediaAsset.ps1 `
     Remove-MediaAsset.ps1 `
     Search-RadioStationContent.ps1 `
     Sync-WOPurge.ps1
