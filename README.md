@@ -11,7 +11,7 @@ iex (new-object System.Net.WebClient).DownloadString('https://raw.github.com/are
 ```
 
 OR 
-Download the 'InstallWideOrbitPSModule.ps1' file and execute it.
+Download the 'Install.ps1' file and execute it.
 
 Once you have executed the install script, you should see the WideOrbit module available for use--
 ```powershell
