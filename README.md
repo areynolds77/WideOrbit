@@ -2,7 +2,7 @@
 WideOrbit Powershell Module
 
 This is a collection of Powershell functions used to interact with the WideOrbit API. Most of the functions (right now) are geared towards bulk metadata/inventory management.
-  
+
 ##Installation
 Powershell V3 or newer required
 To install to your personal modules folder (e.g. ~\Documents\WindowsPowerShell\Modules), run:
@@ -39,7 +39,7 @@ Retreives a list of all the media assets in a provided WideOrbit category, and o
 The user can also choose to backup the selected media assets to a provided folders. 
 #### Get-MediaAsset
 Get-MediaAsset returns all metadata about a selected media asset. If the media asset can not be found, an error status is returned.
-#### Get-A;;RadioStations
+#### Get-AllRadioStations
 Get-AllRadioStations returns information about any radio stations hosted on a WideOrbit Central Server. If the -detailed flag is enabled, 
 the function will also return information about each category assigned to that workstation (and each categories individual properties), 
 as well as a list of workstations assigned to that radio station. If the -export flag is enabled, this data will be exported to a series of csv datafiles.
@@ -57,3 +57,10 @@ Search-RadioStationContent mimics the functionality of Audio Finder, but with a 
 #### Synch-WOPurge
  Deletes media assets from WideOrbit according to a supplied WOTraffic purge file. Will export a csv data file listing deleted files. Files can be backed up before deletion. 
  Supports common paramaters -verbose, -whatif, and -confirm.
+
+## To-Do
+* Flesh out documentation + add examples
+* Add examples of chained functions (i.e. Import-Csv MediaAssets.csv | Remove-MediaAsset)
+* Only some of the functions are returning output as an object--all function outputs should be objects
+* Synch-WOPurge should work on any input object--right now MediaAssets must be in the G column, would be nice if it could detect the appropriate column
+* Imporve verbose/debug logging--there should be a standard set of messages
