@@ -1,10 +1,9 @@
 Function Get-ScheduleByDate {
     <#
         .SYNOPSIS
-        The Get-MediaAsset function is used to obatin information about a provided media asset.
+        The Get-ScheduleByDate function is used to retrieve a schedule for a specific day..
         .DESCRIPTION
-        Get-MediaAsset returns all metadata about a selected media asset. If the media asset can not 
-        be found, an error status is returned.
+        Get-ScheduleByDate returns all of the objects within a days schedule, including playable entries, synch points, traffic merges etc.
         .PARAMETER wo_ip 
         The IP address of your WideOrbit Central server
         .PARAMETER wo_stationname
