@@ -7,6 +7,7 @@ $filelist = echo `
     Get-AllRadioStations.ps1 `
     Get-MediaAsset.ps1 `
     Get-ScheduleByDate.ps1 `
+    Remove-CueAudio.ps1 `
     Remove-MediaAsset.ps1 `
     Search-RadioStationContent.ps1 `
     Sync-WOPurge.ps1

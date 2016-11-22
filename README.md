@@ -1,5 +1,8 @@
 # WideOrbit
 WideOrbit Powershell Module
+
+This is a collection of Powershell functions used to interact with the WideOrbit API. Most of the functions (right now) are geared towards bulk metadata/inventory management.
+  
 ##Installation
 Powershell V3 or newer required
 To install to your personal modules folder (e.g. ~\Documents\WindowsPowerShell\Modules), run:
@@ -36,6 +39,10 @@ Retreives a list of all the media assets in a provided WideOrbit category, and o
 The user can also choose to backup the selected media assets to a provided folders. 
 #### Get-MediaAsset
 Get-MediaAsset returns all metadata about a selected media asset. If the media asset can not be found, an error status is returned.
+#### Get-A;;RadioStations
+Get-AllRadioStations returns information about any radio stations hosted on a WideOrbit Central Server. If the -detailed flag is enabled, 
+the function will also return information about each category assigned to that workstation (and each categories individual properties), 
+as well as a list of workstations assigned to that radio station. If the -export flag is enabled, this data will be exported to a series of csv datafiles.
 #### Get-ScheduleByDate
 Get-ScheduleByDate returns all of the objects within a days schedule, including playable entries, synch points, traffic merges etc.
 #### Remove-CueAudio
