@@ -64,3 +64,4 @@ Search-RadioStationContent mimics the functionality of Audio Finder, but with a 
 * Only some of the functions are returning output as an object--all function outputs should be objects
 * Synch-WOPurge should work on any input object--right now MediaAssets must be in the G column, would be nice if it could detect the appropriate column
 * Imporve verbose/debug logging--there should be a standard set of messages
+* Add Update-MediaAsset
