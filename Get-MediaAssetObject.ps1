@@ -103,7 +103,25 @@ Function Get-MediaAsset {
 
         
 
-        $timer_intro = 
+        $cart.innerxml -match $Start_pattern 
+        $timer_start = $matches[1]
+        $matches = @()
+        $cart.innerxml -match $Intro_pattern
+        $timer_intro = $matches[1]
+        $matches = @()
+        $cart.innerxml -match $HookStart_pattern
+        $timer_hookStart = $matches[1]
+        $matches = @()
+        $cart.innerxml -match $HookEnd_pattern
+        $timer_hookEnd = $matches[1]
+        $matches = @()
+        $cart.innerxml -match $EOM_pattern
+        $timer_eom = $matches[1]
+        $matches = @()
+        $cart.innerxml -match $End_pattern
+        $timer_end = $matches[1]
+        $matches = @()
+
         $cart_object = New-Object -TypeName psobject
         $cart_object | Add-Member -MemberType NoteProperty -Name "cartName" -Value $cart.CartName
         $cart_object | Add-Member -MemberType NoteProperty -Name "category" -Value $cart.category
@@ -126,7 +144,13 @@ Function Get-MediaAsset {
         $cart_object | Add-Member -MemberType NoteProperty -Name "audioMetadata" -Value $cart.audioMetadata
         $cart_object | Add-Member -MemberType NoteProperty -Name "gain" -Value $cart.gain
         $cart_object | Add-Member -MemberType NoteProperty -Name "radioStations" -Value $cart.radioStations
-        $cart_object | Add-Member -MemberType NoteProperty -Name "playchase" -Value $cart.playchase
+        $cart_object | Add-Member -MemberType NoteProperty -Name "timer-start" -Value $timer_start
+        $cart_object | Add-Member -MemberType NoteProperty -Name "timer-intro" -Value $timer_intro
+        $cart_object | Add-Member -MemberType NoteProperty -Name "timer-hookstart" -Value $timer_hookStart
+        $cart_object | Add-Member -MemberType NoteProperty -Name "timer-hookend" -Value $timer_hookEnd
+        $cart_object | Add-Member -MemberType NoteProperty -Name "timer-eom" -Value $timer_eom
+        $cart_object | Add-Member -MemberType NoteProperty -Name "timer-end" -Value $timer_end
+
 
     }
     End {
