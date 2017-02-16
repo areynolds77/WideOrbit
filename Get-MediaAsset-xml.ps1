@@ -1,4 +1,4 @@
-Function Get-MediaAsset {
+Function Get-MediaAssetxml {
     <#
         .SYNOPSIS
         The Get-MediaAsset function is used to obatin information about a provided media asset.
@@ -92,66 +92,9 @@ Function Get-MediaAsset {
             Write-Output "ERROR: Request to retreive Media Asset $wo_category\$wo_cartName has failed. Reason: $GMA_Error"
         }
 
-        $cart = $GMA_Reply.getMediaAssetReply.MediaAsset 
-
-        $Start_pattern = "\<timer millis\=\`"(\d*)`"\>Start"
-        $Intro_pattern =  "\<timer millis\=\`"(\d*)`"\>Intro"
-        $HookStart_pattern = "\<timer millis\=\`"(\d*)`"\>HookStart"
-        $HookEnd_pattern = "\<timer millis\=\`"(\d*)`"\>HookEnd"
-        $EOM_pattern =  "\<timer millis\=\`"(\d*)`"\>EOM"       
-        $End_pattern =  "\<timer millis\=\`"(\d*)`"\>End"       
-
+        $GMA_Reply.getMediaAssetReply.MediaAsset | Write-Output
         
-
-        $cart.innerxml -match $Start_pattern 
-        $timer_start = $matches[1]
-        $matches = @()
-        $cart.innerxml -match $Intro_pattern
-        $timer_intro = $matches[1]
-        $matches = @()
-        $cart.innerxml -match $HookStart_pattern
-        $timer_hookStart = $matches[1]
-        $matches = @()
-        $cart.innerxml -match $HookEnd_pattern
-        $timer_hookEnd = $matches[1]
-        $matches = @()
-        $cart.innerxml -match $EOM_pattern
-        $timer_eom = $matches[1]
-        $matches = @()
-        $cart.innerxml -match $End_pattern
-        $timer_end = $matches[1]
-        $matches = @()
-
-        $cart_object = New-Object -TypeName psobject
-        $cart_object | Add-Member -MemberType NoteProperty -Name "cartName" -Value $cart.CartName
-        $cart_object | Add-Member -MemberType NoteProperty -Name "category" -Value $cart.category
-        $cart_object | Add-Member -MemberType NoteProperty -Name "speedAdjustment" -Value $cart.speedAdjustment
-        $cart_object | Add-Member -MemberType NoteProperty -Name "location" -Value $cart.location
-        $cart_object | Add-Member -MemberType NoteProperty -Name "desc1" -Value $cart.desc1
-        $cart_object | Add-Member -MemberType NoteProperty -Name "desc2" -Value $cart.desc2
-        $cart_object | Add-Member -MemberType NoteProperty -Name "desc3" -Value $cart.desc3
-        $cart_object | Add-Member -MemberType NoteProperty -Name "year" -Value $cart.year
-        $cart_object | Add-Member -MemberType NoteProperty -Name "ending" -Value $cart.ending
-        $cart_object | Add-Member -MemberType NoteProperty -Name "length" -Value $cart.length
-        $cart_object | Add-Member -MemberType NoteProperty -Name "startDateTime" -Value $cart.startDateTime
-        $cart_object | Add-Member -MemberType NoteProperty -Name "killDateTime" -Value $cart.killDateTime
-        $cart_object | Add-Member -MemberType NoteProperty -Name "assetType" -Value $cart.assetType
-        $cart_object | Add-Member -MemberType NoteProperty -Name "nextToPlay" -Value $cart.nextToPlay
-        $cart_object | Add-Member -MemberType NoteProperty -Name "timestamp" -Value $cart.timestamp
-        $cart_object | Add-Member -MemberType NoteProperty -Name "created" -Value $cart.created
-        $cart_object | Add-Member -MemberType NoteProperty -Name "prefix" -Value $cart.prefix
-        $cart_object | Add-Member -MemberType NoteProperty -Name "fadeType" -Value $cart.fadeType
-        $cart_object | Add-Member -MemberType NoteProperty -Name "audioMetadata" -Value $cart.audioMetadata
-        $cart_object | Add-Member -MemberType NoteProperty -Name "gain" -Value $cart.gain
-        $cart_object | Add-Member -MemberType NoteProperty -Name "radioStations" -Value $cart.radioStations
-        $cart_object | Add-Member -MemberType NoteProperty -Name "timer-start" -Value $timer_start
-        $cart_object | Add-Member -MemberType NoteProperty -Name "timer-intro" -Value $timer_intro
-        $cart_object | Add-Member -MemberType NoteProperty -Name "timer-hookstart" -Value $timer_hookStart
-        $cart_object | Add-Member -MemberType NoteProperty -Name "timer-hookend" -Value $timer_hookEnd
-        $cart_object | Add-Member -MemberType NoteProperty -Name "timer-eom" -Value $timer_eom
-        $cart_object | Add-Member -MemberType NoteProperty -Name "timer-end" -Value $timer_end
-
-
+        
     }
     End {
         "Get-MediaAsset completed in " + $FunctionTime.elapsed | Write-Debug
