@@ -6,3 +6,4 @@
 . $PSScriptRoot\Remove-MediaAsset.ps1
 . $PSScriptRoot\Search-RadioStationContent.ps1
 . $PSScriptRoot\Sync-WOPurge.ps1
+. $PSScriptRoot\Update-MediaAsset.ps1
