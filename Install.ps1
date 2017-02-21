@@ -1,6 +1,6 @@
 param([string]$InstallDirectory)
 
-$filelist = echo `
+$filelist = Write-Output `
     WideOrbit.psd1 `
     WideOrbit.psm1 `
     Export-MediaAssets.ps1 `
