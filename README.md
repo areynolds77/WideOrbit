@@ -1,8 +1,6 @@
 # WideOrbit
 WideOrbit Powershell Module
 
-TEST ADD
-
 This is a collection of Powershell functions used to interact with the WideOrbit API. Most of the functions (right now) are geared towards bulk metadata/inventory management.
 
 ##Installation
