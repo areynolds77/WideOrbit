@@ -149,7 +149,8 @@ Function Export-MediaAssets
             foreach ($BackupCart in $ToBeExported) {
                 if ($PSCmdlet.ShouldProcess(($wo_category + "/" + $BackupCart.cartName + " - " + $BackupCart.desc1),"Backing up media asset")) {
                     $sourcefile = $BackupCart.location -replace('^\\\\(.*)\\AUDIO',"\\$wo_ip\AUDIO$1")
-                    $dstfile = $wo_exportdir + "\SP" +  $BackupCart.cartName + ".wav" #Modify this to change exported file names.
+                    #$dstfile = $wo_exportdir + "\SP" +  $BackupCart.cartName + ".wav" #Modify this to change exported file names.
+                    $dstfile = $wo_exportdir + "\"+ $BackupCart.desc1 + "-" + $BackupCart.desc2 + ".wav"
                     Write-Verbose -Message "Backing up source file: '$sourcefile to '$dstfile "
                     Write-Progress -Activity 'Backing up files' -Status 'Copying file $BackupCart' -PercentComplete ($progresscount/$ToBeExported.count * 100) 
                     Copy-Item $sourcefile -Destination $dstfile -Confirm:$False

@@ -4,9 +4,9 @@ Function Get-MediaAsset {
         The Get-MediaAsset function is used to obatin information about a provided media asset.
         .DESCRIPTION
         Get-MediaAsset returns all metadata about a selected media asset. If the media asset can not 
-        be found, an error status is returned.
+        be found, an error is returned.
         .PARAMETER wo_ip 
-        The IP address of your WideOrbit Central server
+        The IP address or hostname of your WideOrbit Central server
         .PARAMETER wo_category
         The name of the media asset's category. Should be exactly three characters.
         .PARAMETER wo_cartName
@@ -38,7 +38,6 @@ Function Get-MediaAsset {
             Mandatory = $true,
             HelpMessage = "IP address of the WideOrbit Central Server you wish to target. FQDNs or hostnames are not supported."
         )]
-        [ValidateScript({$_ -match [IPAddress]$_})]
         [string]$wo_ip,
         [Parameter(
             Position = 1,
