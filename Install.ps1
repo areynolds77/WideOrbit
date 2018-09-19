@@ -11,7 +11,8 @@ $filelist = Write-Output `
     Remove-MediaAsset.ps1 `
     Search-RadioStationContent.ps1 `
     Sync-WOPurge.ps1 `
-    .\Update-MediaAsset.ps1
+    Update-MediaAsset.ps1 `
+    Update-CampaignSpots.ps1
 
 if ('' -eq $InstallDirectory) {
     $personalModules = Join-Path -Path ([System.Environment]::GetFolderPath('MyDocuments')) -ChildPath WindowsPowershell\Modules
