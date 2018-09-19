@@ -99,15 +99,16 @@ $UMA_Body = @"
 </mediaAsset>
 </updateMediaAssetRequest>
 "@
-            $UMA_Reply = [xml](Invoke-WebRequest -Uri $wo_uri -Method POST -ContentType "text/xml" -Body $UMA_Body)
-            $UMA_Reply | Write-Debug
-            if ($UMA_Reply.updateMediaAssetReply.status -match "Success") {
-                "Metadata for media asset $($cart.category)/$($cart.cartName) has been sucessfully updated."
-            } else {
-                "Metadata for media asset $($cart.category)/$($cart.cartName) has failed to update. Reason: $($UMA_Reply.updateMediaAssetReply.description)" | Write-Output
-                "Exiting..." | Write-Output
-                break
-
+            if ($PSCmdlet.ShouldProcess(( $oldcart.category + "/" + $oldcart.cartName + ":" + $($cart.desc1) + "-" + $($cart.desc2)),"Changing Cart Info to: `" $($cart.desc1) - $($oldcart.desc2) `" on ")) {
+                $UMA_Reply = [xml](Invoke-WebRequest -Uri $wo_uri -Method POST -ContentType "text/xml" -Body $UMA_Body)
+                $UMA_Reply | Write-Debug
+                if ($UMA_Reply.updateMediaAssetReply.status -match "Success") {
+                    "Metadata for media asset $($cart.category)/$($cart.cartName) has been sucessfully updated."
+                } else {
+                    "Metadata for media asset $($cart.category)/$($cart.cartName) has failed to update. Reason: $($UMA_Reply.updateMediaAssetReply.description)" | Write-Output
+                    "Exiting..." | Write-Output
+                    break
+                }
             }
         }
     }
@@ -115,3 +116,5 @@ $UMA_Body = @"
         "Update-MediaAsset completed in " + $FunctionTime.elapsed | Write-Debug
     }
 }
+
+Update-CampaignSpots -wo_ip wideorbit -wo_csvfile 'C:\Powershell\WOImport\Campaign Spots Import 2018-09.csv' -Debug -WhatIf
